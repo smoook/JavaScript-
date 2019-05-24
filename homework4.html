@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+  </body>
+  <script type="text/javascript">
+    var log = function() {
+      console.log.apply(console, arguments)
+    }
+    var ensure = function(condition, message) {
+      if(!condition) {
+        log('测试失败:', message)
+      }
+    }
+    var find = function(s1, s2) {
+      var index = -1
+      for(var i = 0; i < s1.length; i++) {
+        if(s1[i] === s2) {
+          return i
+        }
+      }
+      return index
+    }
+
+    var lower = 'abcdefghijklmnopqrstuvwxyz'
+    var upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    var lowercase = function(s) {
+      var result = ''
+      for(var i = 0; i < s.length; i++){
+        var index = find(upper, s[i])
+        result += lower[index]
+      }
+      return result
+    }
+
+    var uppercase = function(s) {
+      var result = ''
+      for(var i = 0; i < s.length; i++){
+        var index = find(lower, s[i])
+        result += upper[index]
+      }
+      return result
+    }
+
+    var uppercase1 = function(s) {
+      var result = ''
+      for(var i = 0; i < s.length; i++){
+        var index = find(lower, s[i])
+        if(index > -1){
+          result += upper[index]
+        } else {
+          result += s[i]
+        }
+      }
+      log(result)
+      return result
+    }
+
+    var shiftedChar = function(char, n){
+      var lower = 'abcdefghijklmnopqrstuvwxyz'
+      var upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+      var index = find(lower, char)
+      if(index > -1) {
+        var position = (index + n + 26) % 26
+        return lower[position]
+      } else {
+        var upperIndex = find(upper, char)
+        if (upperIndex > -1) {
+          var position = (index + n + 26) % 26
+          return upper[position]
+        } else {
+          return char
+        }
+      }
+    }
+     var encode = function(str, n){
+       var result = ''
+       for(var i = 0; i < str.length; i++){
+         result += shiftedChar(str[i], n)
+       }
+       return result
+     }
+
+    var __main = function() {
+      ensure(find('123', '1') == 0)
+      ensure(find('123', '2') == 1)
+      ensure(find('123', '4') == 0)
+      ensure(lowercase('WBC') === 0)
+      ensure(uppercase('ojh') === 0)
+      ensure(uppercase1('ojD') === 0)
+      ensure(encode('aaa', 1) === 'bbb')
+    }
+    __main()
+  </script>
+</html>
