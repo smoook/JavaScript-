@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      .done{
+        text-decoration: line-through
+      }
+    </style>
+  </head>
+  <body>
+    <input class="input-title" type="text">
+    <button type="button" class="btn-add">add</button>
+    <div class="todo-contains">
+    </div>
+    <script>
+      var log = function() {
+        return console.log.apply(console, arguments)
+      }
+      var e = function(s) {
+        return document.querySelector(s)
+      }
+
+      var els = function(s) {
+        return document.querySelectorAll(s)
+      }
+
+      var templateTodo = function(title, done) {
+        done = done ? 'done' : ''
+        var div = `
+          <div class="todo">
+            <span class="title ${done}">${title}</span>
+            <button type="button" class="btn-done">done</button>
+            <button type="button" class="btn-del">delete</button>
+          </div>
+        `
+        return div
+      }
+
+      var insertTodo = function(div) {
+        var contains = e('.todo-contains')
+        contains.insertAdjacentHTML('beforeend', div)
+      }
+
+      // add todo
+      var add = function() {
+        var t = e('.input-title')
+        var title = t.value
+        var div = templateTodo(title, false)
+        insertTodo(div)
+      }
+      var addButton = e('.btn-add')
+      addButton.addEventListener('click', add)
+      // 完成函数 / 取消完成
+      toggleClass = function(ele, className) {
+        if(ele.classList.contains(className)) {
+          ele.classList.remove(className)
+        } else {
+          ele.classList.add(className)
+        }
+      }
+
+      // 删除todo
+
+      // 事件委托
+      var todoContainer = e('.todo-contains')
+      todoContainer.addEventListener('click', function(e){
+        log(e.target.classList)
+        var target = e.target
+        var parent = target.parentElement
+        if(target.classList.contains('btn-done')) {
+          toggleClass(parent, 'done')
+        } else if (target.classList.contains('btn-del')){
+          parent.remove()
+          log('del')
+        }
+      })
+    </script>
+  </body>
+</html>
