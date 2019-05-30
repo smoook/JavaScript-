@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+  </body>
+  <script type="text/javascript">
+    var log = function() {
+      console.log.apply(console, arguments)
+    }
+    var ensure = function(condition, message) {
+      if(!condition) {
+        log('测试失败:', message)
+      }
+    }
+
+    
+
+    /*
+    3 个参数 s old new 都是字符串
+    返回一个「将 s 中的 old 字符串替换为 new 字符串」的字符串
+    假设 old 存在并且只出现一次
+
+    返回 string
+    */
+    var replace = function(s, old, n) {
+        var lenS = s.length
+        var lenOld = old.length
+        var lenNew = n.length
+        var numL = lenS
+        var numR = lenS
+        var temp = []
+        var start = 0
+        for (var i = 0; i < lenOld; i++) {
+            for (var j = start; j < lenS; j++) {
+                if (s[j] == old[i]) {
+                    temp.push(j)
+                    start = j + 1
+                    break
+                } else if (j == lenS - 1) {
+                    return s
+                }
+            }
+        }
+        log(temp)
+        numL = temp[0]
+        numR = numL + temp.length
+        var sL = s.slice(0, numL)
+        var sR = s.slice(numR)
+        log(sR, numR)
+        if (sR.length == s.length) {sR = ""}
+        var str = sL + n + sR
+        log(str)
+        return str
+    }
+    var __main = function() {
+        var str = replace('eegeeoego', 'ego', 'ddd')
+    }
+    __main()
+  </script>
+</html>
