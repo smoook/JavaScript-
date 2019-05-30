@@ -10,11 +10,18 @@
     </style>
   </head>
   <body>
+    <h2>todoList用到的知识点</h2>
+    <p>事件委托根据e.target.classList.contains()判断点击的是哪个类型的按钮</p>
+    <p>父元素parentElement</p>
+    <p>时间处理</p>
+    <p>插入元素insertAdjacentHTML('beforeend', div)</p>
+    <p>localStorage，JSON.stringfy</p>
     <input class="input-title" type="text">
     <button type="button" class="btn-add">add</button>
     <div class="todo-contains">
     </div>
     <script>
+      var localStorageName = 'todos'
       var log = function() {
         return console.log.apply(console, arguments)
       }
@@ -38,21 +45,63 @@
         return div
       }
 
-      var insertTodo = function(div) {
+      var save = function(name, data) {
+        data = JSON.stringify(data)
+        localStorage[name] = data
+      }
+
+      var load = function(name) {
+        var data = localStorage[name]
+        data = JSON.parse(data)
+        return data
+      }
+
+      var saveTodos = function() {
+        var todos = els('.title')
+        var l = []
+        for(var i = 0; i < todos.length; i++) {
+          var done = todos[i].parentElement.classList.contains('done')
+          var todo = {
+            title: todos[i].innerHTML,
+            done: done,
+            time: nowDate()
+          }
+          l.push(todo)
+        }
+        save(localStorageName ,l)
+      }
+
+      var loadTodos = function(name) {
+        var todos = load(name)
+        for(var i = 0; i < todos.length; i++) {
+          var c = todos[i]
+          insertTodo(c.title, c.done)
+        }
+      }
+
+      var insertTodo = function(title, flag) {
+        var div = templateTodo(title, flag)
         var contains = e('.todo-contains')
         contains.insertAdjacentHTML('beforeend', div)
+        // <!-- beforebegin -->
+        // <p>
+        //   <!-- afterbegin -->
+        //   foo
+        //   <!-- beforeend -->
+        // </p>
+        // <!-- afterend -->
       }
 
       // add todo
       var add = function() {
         var t = e('.input-title')
         var title = t.value
-        var div = templateTodo(title, false)
-        insertTodo(div)
+        insertTodo(title, false)
+        saveTodos()
       }
-      var addButton = e('.btn-add')
-      addButton.addEventListener('click', add)
-      // 完成函数 / 取消完成
+      
+
+      // 完成 / 取消完成
       toggleClass = function(ele, className) {
         if(ele.classList.contains(className)) {
           ele.classList.remove(className)
@@ -61,7 +110,17 @@
         }
       }
 
-      // 删除todo
+      var nowDate = function() {
+        var date = new Date()
+        var y = date.getFullYear()
+        var m = date.getMonth() + 1
+        var d = date.getDate()
+        var h = date.getHours()
+        var mm = date.getMinutes()
+        var ss = date.getSeconds()
+
+        return `${y}-${m}-${d} ${h}:${mm}:${ss}`
+      }
 
       // 事件委托
       var todoContainer = e('.todo-contains')
@@ -71,11 +130,24 @@
         var parent = target.parentElement
         if(target.classList.contains('btn-done')) {
           toggleClass(parent, 'done')
+          saveTodos()
         } else if (target.classList.contains('btn-del')){
+          // 删除todo
           parent.remove()
+          saveTodos()
           log('del')
         }
       })
+
+      var __main = function() {
+        var addButton = e('.btn-add')
+        addButton.addEventListener('click', add)
+
+
+        loadTodos(localStorageName)
+      }
+
+      __main()
     </script>
   </body>
 </html>
