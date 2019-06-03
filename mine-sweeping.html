@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mine Sweeping</title>
+</head>
+<body>
+    <script>
+        var log = function() {
+            return console.log.apply(console, arguments)
+        }
+
+        var ensure = function(condition, message) {
+            if(!condition) {
+                log('error', message)
+            }
+        }
+
+        var random01 = function(flag = 1) {
+            var r = Math.random()
+            r = r * 10
+            r = Math.floor(r)
+            return (r % 2) * flag
+        }
+        var randomLine = function(num, flag=1) {
+            var arr = []
+            for(var i = 0; i < num; i++) {
+                var r = random01(flag)
+                arr.push(r)
+            }
+            return arr
+        }
+
+        var markLine = function(array) {
+            var arr = array.slice()
+            var len = array.length
+            for(var i = 0; i < len; i++) {
+                if(array[i] === 9) {
+                    if(i - 1 >= 0) {
+                        arr[i - 1] += 1
+                    }
+                    if(i + 1 < len) {
+                        arr[i + 1] += 1
+                    }
+                }
+            }
+            return arr
+        }
+
+        var randomSquare = function(n, flag=1) {
+            var s = []
+            for(var i=0; i < n; i++) {
+                var l = randomLine(n, flag)
+                s.push(l)
+            }
+            return s
+        }
+
+        var cloneSquare = function(array) {
+            var s = []
+            for(var i = 0; i < array.length; i++) {
+                var line = []
+                for(var j = 0; j < array[i].length; j++) {
+                    line.push(array[i][j])
+                }
+                s.push(line)
+            }
+            return s
+        } 
+        
+        var markItem = function(array, x, y) {
+            var l = array.length
+            if(x>=0 && x<l && y>=0 && y<l) {
+                if(array[x][y] !== 9) {
+                    array[x][y] += 1
+                }
+            }
+        } 
+        var markAround = function(array, x, y) {
+            if(array[x][y] === 9) {
+                markItem(array, x - 1, y)
+                markItem(array, x + 1, y)
+
+                markItem(array, x, y - 1)
+                markItem(array, x, y + 1)
+
+                markItem(array, x - 1, y + 1)
+                markItem(array, x - 1, y - 1)
+
+                markItem(array, x + 1, y - 1)
+                markItem(array, x + 1, y + 1)
+
+            }
+        }
+
+        var markSquare = function(array) {
+            var clone = cloneSquare(array)
+            var len = array.length
+            for(var i = 0; i < len; i++) {
+                var item = array[i]
+                for(var j = 0; j < item.length; j++) {
+                    markAround(clone, i, j)
+                }
+            }
+            return clone
+        }
+
+        __main = function() {
+            var newSquare = randomSquare(4, 9)
+            log(markSquare(newSquare))
+        }
+        
+        __main()
+
+    </script>
+</body>
+</html>
