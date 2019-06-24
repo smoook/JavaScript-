@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>alert 弹出框</title>
+    
+</head>
+<body>
+    <button type="button" class="btn1">GuaAlert</button>
+    <script>
+        // tool function
+        var log = function() {
+            return console.log.apply(console, arguments)
+        }
+
+        var e = function(className) {
+            return document.querySelector(className)
+        }
+        var all = function(className) {
+            return document.querySelectorAll(className)
+        }
+
+        var appendHtml = function(target, element) {
+            target.insertAdjacentHTML('beforeend', element)
+        }
+
+        var bindEvent = function(element, eventName, callback) {
+            element.addEventListener(eventName. callback)
+        }
+        var bindAll = function(selector, eventName, callback) {
+            var all = all(selector)
+            for(var i = 0; i < all.length; i++) {
+                var e = all[i]
+                bindEvent(e, eventName, callback)
+            }
+        }
+
+        var removeAll = function(sel) {
+            var tags = document.querySelectorAll(sel)
+            for (var i = 0; i < tags.length; i++) {
+                var tag = tags[i]
+                tag.remove()
+            }
+        }
+    </script>
+
+    <script>
+    // 作业1
+    // 实现一个 GuaAlert 函数, 如下
+    /*
+    title 是 string
+    message 是 string
+
+    这个函数生成一个弹窗插入页面
+    弹窗包含 title 作为标题 和 message 作为信息
+    还包含一个 OK 按钮
+    点击 OK 按钮关闭弹窗
+    */
+    var GuaAlert = function(title, message) {
+        var template = `
+            <div class="modal-container modal-remove">
+                <div class="modal-mask"><div>
+                <div class="gua-alert vertical-center">
+                    <div class="title">${title}</div>
+                    <div class="message">${message}</div>
+                    <div class="ok">ok</div>
+                </div>
+            </div>
+        `
+        var style = `
+            <style class="modal-remove">
+                .modal-container {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                .modal-mask {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: black;
+                    opacity: 0.5;
+                }
+                .gua-alert {
+                    margin: 0 auto;
+                    width: 200px;
+                    text-align: center;
+                }
+                .vertical-center {
+                    top: 50%;
+                    position: relative;
+                    transform: translateY(-50%);
+                }
+                .gua-alert .title {
+                    font-size: 27px;
+                    background: red;
+                }
+                .gua-alert .message {
+                    background: white;
+                }
+                .gua-alert .ok {
+                    background: blue;
+                }
+            </style>
+        `
+        appendHtml(e('head'), style)
+        appendHtml(e('body'), template)
+        e('.gua-alert .ok').addEventListener('click', function() {
+            removeAll('.modal-remove')
+        })
+    }
+    e('.btn1').addEventListener('click', function() {
+        GuaAlert('alert1', 'content1')
+    })
+    </script>
+</body>
+</html>
